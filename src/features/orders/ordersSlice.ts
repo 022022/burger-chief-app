@@ -2,7 +2,6 @@ import {
 	createAsyncThunk,
 	createEntityAdapter,
 	createSlice,
-	PayloadAction,
 } from '@reduxjs/toolkit';
 import { BurgerGroup } from '../../types/types';
 import { fetchData } from '../../services/sanity/fetchData';
@@ -15,16 +14,23 @@ export interface OrdersState {
 }
 
 export interface BurgerOrder {
-	_type: string;
-	_id: string;
+	totalOrderId: string;
+    time: string;
+	id: string;
 	ingredients: string[];
 	status: 'idle' | 'cooking' | 'done';
 }
 
-const ordersAdapter = createEntityAdapter<BurgerOrder>({
-	selectId: (order) => order._id,
-});
+export interface TotalOrder {
+    totalOrderId: string;
+	phone: string;
+	address: string;
+	orderContents: BurgerOrder[];
+}
 
+const ordersAdapter = createEntityAdapter<BurgerOrder>({
+	selectId: (order) => order.id,
+});
 
 const initialState = ordersAdapter.getInitialState<{
 	burger: BurgerGroup[];
@@ -36,18 +42,7 @@ const initialState = ordersAdapter.getInitialState<{
 
 export const getData = createAsyncThunk('orders/getData', async () => {
 	const response = await fetchData();
-    const result: { burger: BurgerGroup[]; burgerOrders: BurgerOrder[] } = {
-		burger: [],
-		burgerOrders: [],
-	};
-    for(const item of response) {
-        if(item._type === 'category') {
-            result.burger.push(item);
-        } else {
-            result.burgerOrders.push(item);
-        }
-    }
-	return result;
+	return response;
 });
 
 export const orderSlice = createSlice({
@@ -67,17 +62,40 @@ export const orderSlice = createSlice({
 				state.status = 'loading';
 			})
 			.addCase(
-				getData.fulfilled,
-				(
-					state,
-					action: PayloadAction<{
-						burger: BurgerGroup[];
-						burgerOrders: BurgerOrder[];
-					}>
-				) => {
+				getData.fulfilled, (state,	action) => {
+                    const burger: BurgerGroup[] = [];
+                    const ordersArranged: BurgerOrder[]  = [];
+
+                    for(const item of action.payload) {
+                        if(item._type === 'category') {
+                            burger.push(item);
+                        } else if (item._type === 'orders') {
+							for (const burger of item.orderContents) {
+								const singleOrder: BurgerOrder = {
+									totalOrderId: item.totalOrderId,
+									time: '',
+									id: burger.id,
+									ingredients: burger.ingredients,
+									status: 'idle',
+								};
+
+								ordersArranged.push(singleOrder);
+
+								if (burger.quantity > 1) {
+									for (let i = 2;	i <= burger.quantity; i++) {
+										ordersArranged.push({
+											...singleOrder,
+											id: `${burger.id}-${i}`,
+										});
+									}
+								}
+							}
+						}
+                    }
+
+                    state.burger = burger;
+					ordersAdapter.setAll(state, ordersArranged);
 					state.status = 'success';
-					state.burger = action.payload.burger;
-					ordersAdapter.setAll(state, action.payload.burgerOrders);
 				}
 			)
 			.addCase(getData.rejected, (state) => {
@@ -94,6 +112,6 @@ export const { selectAll, selectById, selectIds } =
 export const selectBurger = (state: RootState) =>
 		state.orders.burger;
 
-export const selectOrderStatus = (state: RootState) => state.orders.status;
+export const selectLoadStatus = (state: RootState) => state.orders.status;
 
 export default orderSlice.reducer;
