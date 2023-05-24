@@ -1,0 +1,12 @@
+:root {
+  --primary-text: #fff;
+  --secondary-text: #c3c3c3;
+  --primary-bg: #292929;
+  --secondary-bg: #464646;
+}
+
+@import url(./features/burger/burgerConstructor.css);
+@import url(./features/order/order.css);
+@import url(./features/order/OrderItem/orderItem.css);
+@import url(./pages/Main/main.css);
+@import url(./components/BurgerImage/BurgerImage/burgerImage.css);

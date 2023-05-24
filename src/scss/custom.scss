@@ -1,0 +1,22 @@
+$primary: #09801d;
+$secondary: #6c757d;
+$success: #09801d;
+$info: #0068c3;
+$warning: #f0b400;
+$danger: #ff5656;
+$light: #f8f8f8;
+$dark: #292929;
+
+$body-bg: #292929;
+$body-color: #fff;
+
+$form-check-input-border:  1px solid rgba($light, .75);
+
+@import "./../../node_modules/bootstrap/scss/functions";
+@import "./../../node_modules/bootstrap/scss/variables";
+@import "./../../node_modules/bootstrap/scss/maps";
+@import "./../../node_modules/bootstrap/scss/mixins";
+@import "./../../node_modules/bootstrap/scss/root";
+
+@import "./../../node_modules/bootstrap/scss/buttons";
+@import "./../../node_modules/bootstrap/scss/forms/form-check";

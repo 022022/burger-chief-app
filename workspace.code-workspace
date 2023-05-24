@@ -1,0 +1,12 @@
+{
+	"folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+		"workbench.colorTheme": "Default Light+",
+		"editor.formatOnPaste": true,
+		"editor.tabSize": 4
+	}
+}
