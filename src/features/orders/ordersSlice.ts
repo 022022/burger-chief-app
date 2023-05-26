@@ -1,6 +1,7 @@
 import {
 	createAsyncThunk,
 	createEntityAdapter,
+	createSelector,
 	createSlice,
 } from '@reduxjs/toolkit';
 import { BurgerGroup } from '../../types/types';
@@ -75,10 +76,10 @@ export const orderSlice = createSlice({
 							for (const burger of item.orderContents) {
 								const singleOrder: BurgerOrder = {
 									totalOrderId: item.totalOrderId,
-									date: new Date(item.orderDate),
+									date: item.orderDate,
 									id: burger.id,
 									ingredients: burger.ingredients,
-                                    chief: '',
+									chief: '',
 									orderStatus: 'idle',
 								};
 
@@ -112,8 +113,10 @@ export const { setCooking, setDone } = orderSlice.actions;
 export const { selectAll, selectById, selectIds } =
 	ordersAdapter.getSelectors<RootState>((state) => state.orders);
 
-export const selectBurger = (state: RootState) =>
-		state.orders.burger;
+export const selectBurger = createSelector(
+	[(state: RootState) => state.orders.burger],
+	(state) => [...state].sort((a, b) => a.sortOrder - b.sortOrder)
+);
 
 export const selectFetchStatus = (state: RootState) => state.orders.fetchStatus;
 

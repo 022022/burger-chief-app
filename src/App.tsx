@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import { useEffect } from 'react';
 import { getData, selectFetchStatus } from './features/orders/ordersSlice';
 import { Error } from './pages/Error';
+import { Burger } from './features/burger/Burger';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -22,13 +23,14 @@ function App() {
 		return <Error />;
 	} else {
         return (
-            <Routes>
-                <Route path='/' element={<Layout />}>
-                    <Route index element={<Main />} />
-                    <Route path='*' element={<Main />} />
-                </Route>
-            </Routes>
-        );
+			<Routes>
+				<Route path='/' element={<Layout />}>
+					<Route index element={<Main />} />
+					<Route path='burger/:id' element={<Burger />} />
+					<Route path='*' element={<Main />} />
+				</Route>
+			</Routes>
+		);
     }
 }
 
