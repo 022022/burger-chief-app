@@ -10,19 +10,21 @@ import { RootState } from '../../app/store';
 export interface OrdersState {
 	burger: BurgerGroup[];
 	burgerOrders: BurgerOrder[];
-	status: 'idle' | 'loading' | 'failed' | 'success';
+	fetchStatus: 'idle' | 'loading' | 'failed' | 'success';
 }
 
 export interface BurgerOrder {
 	totalOrderId: string;
-    time: string;
+    date: Date;
 	id: string;
 	ingredients: string[];
-	status: 'idle' | 'cooking' | 'done';
+    chief: string;
+	orderStatus: 'idle' | 'cooking' | 'done';
 }
 
 export interface TotalOrder {
     totalOrderId: string;
+    date: Date;
 	phone: string;
 	address: string;
 	orderContents: BurgerOrder[];
@@ -34,10 +36,10 @@ const ordersAdapter = createEntityAdapter<BurgerOrder>({
 
 const initialState = ordersAdapter.getInitialState<{
 	burger: BurgerGroup[];
-	status: string;
+	fetchStatus: string;
 }>({
 	burger: [],
-	status: 'idle',
+	fetchStatus: 'idle',
 });
 
 export const getData = createAsyncThunk('orders/getData', async () => {
@@ -50,16 +52,16 @@ export const orderSlice = createSlice({
 	initialState,
 	reducers: {
 		setCooking: (state, action) => {
-            ordersAdapter.updateOne(state, {id: action.payload, changes: {status: 'cooking'}})
+            ordersAdapter.updateOne(state, {id: action.payload, changes: {orderStatus: 'cooking'}})
 		},
 		setDone: (state, action) => {
-            ordersAdapter.updateOne(state, {id: action.payload, changes: {status: 'done'}})
+            ordersAdapter.updateOne(state, {id: action.payload, changes: {orderStatus: 'done'}})
 		},
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getData.pending, (state) => {
-				state.status = 'loading';
+				state.fetchStatus = 'loading';
 			})
 			.addCase(
 				getData.fulfilled, (state,	action) => {
@@ -73,10 +75,11 @@ export const orderSlice = createSlice({
 							for (const burger of item.orderContents) {
 								const singleOrder: BurgerOrder = {
 									totalOrderId: item.totalOrderId,
-									time: '',
+									date: new Date(item.orderDate),
 									id: burger.id,
 									ingredients: burger.ingredients,
-									status: 'idle',
+                                    chief: '',
+									orderStatus: 'idle',
 								};
 
 								ordersArranged.push(singleOrder);
@@ -95,11 +98,11 @@ export const orderSlice = createSlice({
 
                     state.burger = burger;
 					ordersAdapter.setAll(state, ordersArranged);
-					state.status = 'success';
+					state.fetchStatus = 'success';
 				}
 			)
 			.addCase(getData.rejected, (state) => {
-				state.status = 'failed';
+				state.fetchStatus = 'failed';
 			});
 	},
 });
@@ -112,6 +115,6 @@ export const { selectAll, selectById, selectIds } =
 export const selectBurger = (state: RootState) =>
 		state.orders.burger;
 
-export const selectLoadStatus = (state: RootState) => state.orders.status;
+export const selectFetchStatus = (state: RootState) => state.orders.fetchStatus;
 
 export default orderSlice.reducer;

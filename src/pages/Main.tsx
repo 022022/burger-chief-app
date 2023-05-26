@@ -1,12 +1,10 @@
 import { useAppSelector } from '../app/hooks';
 import { OrderCard } from '../components/OrderCard/OrderCard';
-import { selectBurger, selectIds, selectLoadStatus } from '../features/orders/ordersSlice';
+import { selectIds } from '../features/orders/ordersSlice';
+import { Container } from 'react-bootstrap';
 
 export function Main() {
     const allOrdersIds = useAppSelector(selectIds);
-
-    const burger = useAppSelector(selectBurger);
-    const status = useAppSelector(selectLoadStatus);
 
     const orders = allOrdersIds.map((id) => (
 		<OrderCard
@@ -15,5 +13,9 @@ export function Main() {
 		/>
 	));
 
-    return <>{orders}</>;
+    return (
+		<Container>
+			<div className='d-flex flex-wrap gap-3'>{orders}</div>
+		</Container>
+	);
 }

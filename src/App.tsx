@@ -3,26 +3,33 @@ import './scss/style.css';
 import { Main } from './pages/Main';
 import { Route, Routes } from 'react-router';
 import Layout from './layouts/Layout';
-import { useAppDispatch } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 import { useEffect } from 'react';
-import { getData } from './features/orders/ordersSlice';
+import { getData, selectFetchStatus } from './features/orders/ordersSlice';
+import { Error } from './pages/Error';
 
 function App() {
     const dispatch = useAppDispatch();
+    const status = useAppSelector(selectFetchStatus);
 
     useEffect(() => {
         dispatch(getData());
     }, [dispatch]);
 
-	return (
-		<Routes>
-			<Route path='/' element={<Layout />}>
-				<Route index element={<Main />} />
-				<Route path='*' element={<Main />} />
-			</Route>
-		</Routes>
-	);
-
+    if (status === 'idle' || status === 'loading') {
+		return <p className='text-center pt-3'>Идет загрузка...</p>;
+	} else if (status === 'failed') {
+		return <Error />;
+	} else {
+        return (
+            <Routes>
+                <Route path='/' element={<Layout />}>
+                    <Route index element={<Main />} />
+                    <Route path='*' element={<Main />} />
+                </Route>
+            </Routes>
+        );
+    }
 }
 
 export default App;

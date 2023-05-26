@@ -13,32 +13,40 @@ export function OrderCard({ id }: { id: EntityId }) {
 	}
 
 	const statusInfo = () => {
-		switch (order?.status) {
+		switch (order?.orderStatus) {
 			case 'idle':
 				return (
-					<Button variant='secondary' onClick={startCooking}>
+					<Button variant='primary' onClick={startCooking}>
 						Взять в работу
 					</Button>
 				);
 			case 'cooking':
-				return <p>В работе</p>;
+				return <p>Готовит {order.chief}</p>;
 			case 'done':
 				return <p>Готово</p>;
 		}
 	};
 
+    const statusColor = order?.orderStatus === 'idle' ? 'warning' : 'secondary';
+
 	return (
-		<Card className='text-center' bg='dark' text='light'>
-			<Card.Header>
-				{order?.totalOrderId}/{id}
-			</Card.Header>
+		<Card
+			className='text-center'
+			bg='dark'
+			text='light'
+			border={statusColor}
+		>
 			<Card.Body>
-				<Card.Title>Заказ</Card.Title>
-				<Card.Text>{order?.ingredients}</Card.Text>
+				<Card.Text>
+					Заказ принят в {
+					order?.date.getHours().toString().padStart(2, '0')} : 
+					{order?.date.getMinutes().toString().padStart(2, '0')}
+				</Card.Text>
 				{statusInfo()}
 			</Card.Body>
 			<Card.Footer className='text-muted'>
-				Время заказа: {order?.time}
+				<p>ID бургера: {id}</p>
+				<p>ID заказа: {order?.totalOrderId}</p>
 			</Card.Footer>
 		</Card>
 	);
