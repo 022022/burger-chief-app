@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { selectById, setCooking } from '../../features/orders/ordersSlice';
+import { selectById, setCooking } from '../../features/ordersList/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { EntityId } from '@reduxjs/toolkit';
 import { Link, useNavigate } from 'react-router-dom';

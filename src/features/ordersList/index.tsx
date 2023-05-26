@@ -1,6 +1,6 @@
-import { useAppSelector } from '../app/hooks';
-import { OrderCard } from '../components/OrderCard/OrderCard';
-import { selectIds } from '../features/orders/ordersSlice';
+import { useAppSelector } from '../../app/hooks';
+import { OrderCard } from '../../components/OrderCard/OrderCard';
+import { selectIds } from './ordersSlice';
 import { Container } from 'react-bootstrap';
 
 export function Main() {

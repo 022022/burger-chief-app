@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import orderReducer from '../features/orders/ordersSlice';
+import orderReducer from '../features/ordersList/ordersSlice';
 
 export const store = configureStore({
 	reducer: {

@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks';
-import { selectBurger, selectById, setDone } from '../orders/ordersSlice';
+import { selectBurger, selectById, setDone } from '../ordersList/ordersSlice';
 import { Button, Container, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 

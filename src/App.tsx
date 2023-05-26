@@ -1,13 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/style.css';
-import { Main } from './pages/Main';
+import { Main } from './features/ordersList';
 import { Route, Routes } from 'react-router';
 import Layout from './layouts/Layout';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { useEffect } from 'react';
-import { getData, selectFetchStatus } from './features/orders/ordersSlice';
+import { getData, selectFetchStatus } from './features/ordersList/ordersSlice';
 import { Error } from './pages/Error';
-import { Burger } from './features/burger/Burger';
+import { Burger } from './features/burger';
 
 function App() {
     const dispatch = useAppDispatch();
