@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/style.css';
-import { Main } from './features/ordersList';
+import { OrdersList } from './features/ordersList';
 import { Route, Routes } from 'react-router';
 import Layout from './layouts/Layout';
 import { useAppDispatch, useAppSelector } from './app/hooks';
@@ -25,9 +25,9 @@ function App() {
         return (
 			<Routes>
 				<Route path='/' element={<Layout />}>
-					<Route index element={<Main />} />
+					<Route index element={<OrdersList />} />
 					<Route path='burger/:id' element={<Burger />} />
-					<Route path='*' element={<Main />} />
+					<Route path='*' element={<OrdersList />} />
 				</Route>
 			</Routes>
 		);

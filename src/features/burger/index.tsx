@@ -3,12 +3,14 @@ import { useAppSelector } from '../../app/hooks';
 import { selectBurger, selectById, setDone } from '../ordersList/ordersSlice';
 import { Button, Container, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { FormEvent, useState } from 'react';
 
 export function Burger() {
     const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    console.log(id, Number(id), String(id));
+    const [validated, setValidated] = useState(false);
+
     const order = useAppSelector((state) => selectById(state, String(id)));
     const burger = useAppSelector(selectBurger);
 
@@ -32,7 +34,7 @@ export function Burger() {
 							>
 								<Form.Check
                                     required
-									type={group.type}
+									type='checkbox'
 									label={option.value}
 									title={option.value}
 									name={group.categoryId}
@@ -46,20 +48,33 @@ export function Burger() {
 		}
     }
 
-    function handleDone() {
-		dispatch(setDone(order?.id));
-		navigate('/', { replace: true });
+    function handleDone(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+		event.stopPropagation();
+		const form = event.currentTarget;
+
+		if (form.checkValidity() === false) {
+			setValidated(true);
+		} else {
+			dispatch(setDone(order?.id));
+			navigate('/', { replace: true });
+		}
 	}
 
     return (
 		<Container>
-			<Form className=''>
+			<Form
+				className=''
+				noValidate
+				validated={validated}
+				onSubmit={handleDone}
+			>
 				{groups}
-                { order?.orderStatus === 'cooking' &&
-                    <Button variant='primary' onClick={handleDone}>
-                        Готово
-                    </Button>
-                }
+				{order?.orderStatus === 'cooking' && (
+					<Button variant='primary' type='submit'>
+						Готово
+					</Button>
+				)}
 			</Form>
 		</Container>
 	);
