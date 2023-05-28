@@ -8,6 +8,8 @@ import { useEffect } from 'react';
 import { getData, selectFetchStatus } from './features/ordersList/ordersSlice';
 import { Error } from './pages/Error';
 import { Burger } from './features/burger';
+import { Info } from './pages/Info';
+import { Cooking } from './pages/Cooking';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -26,6 +28,8 @@ function App() {
 			<Routes>
 				<Route path='/' element={<Layout />}>
 					<Route index element={<OrdersList />} />
+					<Route path='info' element={<Info />} />
+					<Route path='cooking' element={<Cooking />} />
 					<Route path='burger/:id' element={<Burger />} />
 					<Route path='*' element={<OrdersList />} />
 				</Route>

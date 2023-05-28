@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import { addToUserCooking, selectById, setCooking } from '../../features/ordersList/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { EntityId } from '@reduxjs/toolkit';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export function OrderCard({ id }: { id: EntityId }) {
 	const dispatch = useAppDispatch();
@@ -49,7 +49,7 @@ export function OrderCard({ id }: { id: EntityId }) {
 				{statusInfo()}
                 <p>Количество: {order?.quantity}</p>
 			</Card.Body>
-			<Card.Footer className='text-muted'>
+			<Card.Footer>
 				<Link to={`/burger/${order?.id}`}>ID бургера: {id}</Link>
 				<p>ID заказа: {order?.totalOrderId}</p>
 			</Card.Footer>

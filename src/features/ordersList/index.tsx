@@ -15,6 +15,7 @@ export function OrdersList() {
 
     return (
 		<Container>
+            <h1>Все заказы</h1>
 			<div className='d-flex flex-wrap gap-3'>{orders}</div>
 		</Container>
 	);

@@ -39,7 +39,7 @@ export function Burger() {
 									title={option.value}
 									name={group.categoryId}
 									id={option.id}
-									checked={order?.orderStatus === 'done'}
+									defaultChecked={order?.orderStatus === 'done'}
 									disabled={order?.orderStatus === 'done'}
 								/>
 							</li>
@@ -65,6 +65,8 @@ export function Burger() {
 
     return (
 		<Container>
+			<h1>Приготовление заказа</h1>
+			<p>ID бургера: {order?.id}</p>
 			<Form
 				className=''
 				noValidate

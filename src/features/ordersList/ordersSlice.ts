@@ -72,7 +72,9 @@ export const orderSlice = createSlice({
 			);
 		},
 		addToUserCooking: (state, action) => {
-            state.userCooking.push(action.payload);
+            if (!state.userCooking.find((item) => item === action.payload)) {
+                state.userCooking.push(action.payload);
+            }
 		},
 	},
 	extraReducers: (builder) => {
@@ -125,5 +127,7 @@ export const selectBurger = createSelector(
 );
 
 export const selectFetchStatus = (state: RootState) => state.orders.fetchStatus;
+
+export const selectUserCooking = (state: RootState) => state.orders.userCooking;
 
 export default orderSlice.reducer;
