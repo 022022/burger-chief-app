@@ -33,12 +33,14 @@ export function Burger() {
 								key={`group-${group.categoryId}-${option.id}`}
 							>
 								<Form.Check
-                                    required
+									required
 									type='checkbox'
 									label={option.value}
 									title={option.value}
 									name={group.categoryId}
 									id={option.id}
+									checked={order?.orderStatus === 'done'}
+									disabled={order?.orderStatus === 'done'}
 								/>
 							</li>
 						))}

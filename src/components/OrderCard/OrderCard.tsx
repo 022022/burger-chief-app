@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { selectById, setCooking } from '../../features/ordersList/ordersSlice';
+import { addToUserCooking, selectById, setCooking } from '../../features/ordersList/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { EntityId } from '@reduxjs/toolkit';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,11 +8,10 @@ import { Link, useNavigate } from 'react-router-dom';
 export function OrderCard({ id }: { id: EntityId }) {
 	const dispatch = useAppDispatch();
     const order = useAppSelector((state) => selectById(state, id));
-    const navigate = useNavigate();
 
 	function startCooking() {
 		dispatch(setCooking(id));
-        navigate(`/burger/${order?.id}`, { replace: true });
+        dispatch(addToUserCooking(id));
 	}
 
 	const statusInfo = () => {
@@ -26,7 +25,7 @@ export function OrderCard({ id }: { id: EntityId }) {
 			case 'cooking':
 				return <p>Готовит {order.chief}</p>;
 			case 'done':
-				return <p>Готово</p>;
+				return <p>Готово ({order.chief})</p>;
 		}
 	};
 
@@ -48,6 +47,7 @@ export function OrderCard({ id }: { id: EntityId }) {
 					{date.getMinutes().toString().padStart(2, '0')}
 				</Card.Text>
 				{statusInfo()}
+                <p>Количество: {order?.quantity}</p>
 			</Card.Body>
 			<Card.Footer className='text-muted'>
 				<Link to={`/burger/${order?.id}`}>ID бургера: {id}</Link>
