@@ -43,15 +43,20 @@ export function OrderCard({ id }: { id: EntityId }) {
 			<Card.Body>
 				<Card.Text>
 					Заказ принят в {date.getHours().toString().padStart(2, '0')}
-                     :
-					{date.getMinutes().toString().padStart(2, '0')}
+					:{date.getMinutes().toString().padStart(2, '0')}
 				</Card.Text>
 				{statusInfo()}
-                <p>Количество: {order?.quantity}</p>
+				<Card.Text>Количество: {order?.quantity}</Card.Text>
+				<Link
+					to={`/burger/${order?.id}`}
+					className='d-flex justify-content-center link-light my-4'
+				>
+					Ингредиенты
+				</Link>
 			</Card.Body>
 			<Card.Footer>
-				<Link to={`/burger/${order?.id}`}>ID бургера: {id}</Link>
-				<p>ID заказа: {order?.totalOrderId}</p>
+				<p className='fw-lighter'>ID бургера: {id}</p>
+				<p className='fw-lighter'>ID заказа: {order?.totalOrderId}</p>
 			</Card.Footer>
 		</Card>
 	);

@@ -25,11 +25,11 @@ export function Burger() {
 		if (inOrder.length) {
 			groups.push(
 				<Form.Group key={`group-${group.categoryId}`}>
-					<h2> {group.category} </h2>
-					<ul>
+					<h2 className='mt-5'> {group.category} </h2>
+					<ul className='list-unstyled'>
 						{inOrder.map((option) => (
 							<li
-								className=''
+								className='m-3'
 								key={`group-${group.categoryId}-${option.id}`}
 							>
 								<Form.Check
@@ -39,8 +39,10 @@ export function Burger() {
 									title={option.value}
 									name={group.categoryId}
 									id={option.id}
-									defaultChecked={order?.orderStatus === 'done'}
-									disabled={order?.orderStatus === 'done'}
+									defaultChecked={
+										order?.orderStatus === 'done'
+									}
+									disabled={order?.orderStatus !== 'cooking'}
 								/>
 							</li>
 						))}
@@ -65,17 +67,17 @@ export function Burger() {
 
     return (
 		<Container>
-			<h1>Приготовление заказа</h1>
-			<p>ID бургера: {order?.id}</p>
+			<h1 className='mt-5'>Приготовление заказа</h1>
+			<p className='mb-5'>ID бургера: {order?.id}</p>
 			<Form
-				className=''
+				className='mb-5'
 				noValidate
 				validated={validated}
 				onSubmit={handleDone}
 			>
 				{groups}
 				{order?.orderStatus === 'cooking' && (
-					<Button variant='primary' type='submit'>
+					<Button variant='primary' type='submit' className='mt-5'>
 						Готово
 					</Button>
 				)}

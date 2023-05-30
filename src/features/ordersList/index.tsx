@@ -15,8 +15,16 @@ export function OrdersList() {
 
     return (
 		<Container>
-            <h1>Все заказы</h1>
-			<div className='d-flex flex-wrap gap-3'>{orders}</div>
+			<h1 className='mt-5 mb-5'>Все заказы</h1>
+			<div
+				style={{
+					display: 'grid',
+					gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+					gap: '3rem',
+				}}
+			>
+				{orders}
+			</div>
 		</Container>
 	);
 }

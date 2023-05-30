@@ -10,14 +10,27 @@ export function Cooking() {
 
 	const usersOrders = allOrdersIds.filter((id) => userCooking.has(String(id)));
 
-	return (
-		<Container>
-			<h1>У меня в работе</h1>
-			<div className='d-flex flex-wrap gap-3'>
-				{usersOrders.map((id) => (
-					<OrderCard key={id} id={id} />
-				))}
-			</div>
-		</Container>
-	);
+    if (usersOrders.length === 0) {
+        return (
+			<Container><p>У вас в работе нет заказов</p></Container>
+        )
+    } else {
+		return (
+			<Container>
+				<h1 className='mt-5 mb-5'>У меня в работе</h1>
+				<div
+					style={{
+						display: 'grid',
+						gridTemplateColumns:
+							'repeat(auto-fit, minmax(230px, 1fr))',
+						gap: '3rem',
+					}}
+				>
+					{usersOrders.map((id) => (
+						<OrderCard key={id} id={id} />
+					))}
+				</div>
+			</Container>
+		);
+    }
 }
