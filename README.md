@@ -1,4 +1,4 @@
-# Конструктор бургеров #
+# Приложение для бургер-шефа #
 Приложения для создания и заказа авторских бургеров
 
 React / TypeScript / Redux Toolkit / Framer Motion / Sanity Headless CMS REST API / React Bootstrap
