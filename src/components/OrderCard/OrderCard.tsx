@@ -1,35 +1,38 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { addToUserCooking, selectById, setCooking } from '../../features/ordersList/ordersSlice';
+import { OrderStatus, selectById, setCooking } from '../../features/ordersList/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { EntityId } from '@reduxjs/toolkit';
 import { Link } from 'react-router-dom';
+import { addToUserCooking, selectUserName } from '../../features/user/userSlice';
 
 export function OrderCard({ id }: { id: EntityId }) {
 	const dispatch = useAppDispatch();
     const order = useAppSelector((state) => selectById(state, id));
+    const chief = useAppSelector(selectUserName);
 
 	function startCooking() {
 		dispatch(setCooking(id));
-        dispatch(addToUserCooking(id));
+        dispatch(addToUserCooking(order?.id));
 	}
 
 	const statusInfo = () => {
 		switch (order?.orderStatus) {
-			case 'idle':
+			case OrderStatus.idle:
 				return (
 					<Button variant='primary' onClick={startCooking}>
 						Взять в работу
 					</Button>
 				);
-			case 'cooking':
-				return <p>Готовит {order.chief}</p>;
-			case 'done':
-				return <p>Готово ({order.chief})</p>;
+			case OrderStatus.cooking:
+				return <p>Готовит {chief}</p>;
+			case OrderStatus.done:
+				return <p>Готово ({chief})</p>;
 		}
 	};
 
-    const statusColor = order?.orderStatus === 'idle' ? 'warning' : 'secondary';
+    const statusColor =
+		order?.orderStatus === OrderStatus.idle ? 'warning' : 'secondary';
 
     const date = new Date(order?.date || Date.now());
 

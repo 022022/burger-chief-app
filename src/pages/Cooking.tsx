@@ -1,8 +1,9 @@
 
 import { Container } from 'react-bootstrap';
 import { useAppSelector } from '../app/hooks';
-import { selectIds, selectUserCooking } from '../features/ordersList/ordersSlice';
+import { selectIds } from '../features/ordersList/ordersSlice';
 import { OrderCard } from '../components/OrderCard/OrderCard';
+import { selectUserCooking } from '../features/user/userSlice';
 
 export function Cooking() {
 	const allOrdersIds = useAppSelector(selectIds);

@@ -11,18 +11,27 @@ import { RootState } from '../../app/store';
 export interface OrdersState {
 	burger: BurgerGroup[];
 	burgerOrders: BurgerOrder[];
-	userCooking: string[];
-	fetchStatus: 'idle' | 'loading' | 'failed' | 'success';
+	fetchStatus: FetchStatus;
+}
+
+export enum FetchStatus {
+	idle,
+	loading,
+	failed,
+	success
+}
+
+export enum OrderStatus {
+    idle, cooking, done
 }
 
 export interface BurgerOrder {
 	totalOrderId: string;
-    date: Date;
+	date: Date;
 	id: string;
 	ingredients: string[];
-    chief: string;
-    quantity: number;
-	orderStatus: 'idle' | 'cooking' | 'done';
+	quantity: number;
+	orderStatus: OrderStatus;
 }
 
 export interface TotalOrder {
@@ -39,12 +48,10 @@ const ordersAdapter = createEntityAdapter<BurgerOrder>({
 
 const initialState = ordersAdapter.getInitialState<{
 	burger: BurgerGroup[];
-	fetchStatus: string;
-    userCooking: string[];
+	fetchStatus: FetchStatus
 }>({
 	burger: [],
-    userCooking: [],
-	fetchStatus: 'idle',
+	fetchStatus: FetchStatus.idle,
 });
 
 export const getData = createAsyncThunk('orders/getData', async () => {
@@ -59,28 +66,20 @@ export const orderSlice = createSlice({
 		setCooking: (state, action) => {
 			ordersAdapter.updateOne(state, {
 				id: action.payload,
-				changes: { orderStatus: 'cooking' },
+				changes: { orderStatus: OrderStatus.cooking },
 			});
 		},
 		setDone: (state, action) => {
 			ordersAdapter.updateOne(state, {
 				id: action.payload,
-				changes: { orderStatus: 'done' },
+				changes: { orderStatus: OrderStatus.done },
 			});
-            state.userCooking = state.userCooking.filter(
-				(item) => item !== action.payload
-			);
-		},
-		addToUserCooking: (state, action) => {
-            if (!state.userCooking.find((item) => item === action.payload)) {
-                state.userCooking.push(action.payload);
-            }
 		},
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getData.pending, (state) => {
-				state.fetchStatus = 'loading';
+				state.fetchStatus = FetchStatus.loading;
 			})
 			.addCase(getData.fulfilled, (state, action) => {
 				const burger: BurgerGroup[] = [];
@@ -96,9 +95,8 @@ export const orderSlice = createSlice({
 								date: item.orderDate,
 								id: burger.id,
 								ingredients: burger.ingredients,
-								chief: '',
 								quantity: burger.quantity,
-								orderStatus: burger.orderStatus,
+                                orderStatus: OrderStatus.idle
 							};
 
 							ordersArranged.push(singleOrder);
@@ -108,15 +106,15 @@ export const orderSlice = createSlice({
 
 				state.burger = burger;
 				ordersAdapter.setAll(state, ordersArranged);
-				state.fetchStatus = 'success';
+				state.fetchStatus = FetchStatus.success;
 			})
 			.addCase(getData.rejected, (state) => {
-				state.fetchStatus = 'failed';
+				state.fetchStatus = FetchStatus.failed;
 			});
 	},
 });
 
-export const { setCooking, addToUserCooking, setDone } = orderSlice.actions;
+export const { setCooking, setDone } = orderSlice.actions;
 
 export const { selectAll, selectById, selectIds } =
 	ordersAdapter.getSelectors<RootState>((state) => state.orders);
@@ -128,6 +126,6 @@ export const selectBurger = createSelector(
 
 export const selectFetchStatus = (state: RootState) => state.orders.fetchStatus;
 
-export const selectUserCooking = (state: RootState) => state.orders.userCooking;
+
 
 export default orderSlice.reducer;
