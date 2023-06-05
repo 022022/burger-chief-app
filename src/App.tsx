@@ -5,7 +5,7 @@ import { Route, Routes } from 'react-router';
 import Layout from './layouts/Layout';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { useEffect } from 'react';
-import { getData, selectFetchStatus } from './features/ordersList/ordersSlice';
+import { FetchStatus, getData, selectFetchStatus } from './features/ordersList/ordersSlice';
 import { Error } from './pages/Error';
 import { Burger } from './features/burger';
 import { Info } from './pages/Info';
@@ -19,12 +19,12 @@ function App() {
         dispatch(getData());
     }, [dispatch]);
 
-    if (status === 'idle' || status === 'loading') {
+    if (status === FetchStatus.idle || status === FetchStatus.loading) {
 		return <p className='text-center pt-3'>Идет загрузка...</p>;
-	} else if (status === 'failed') {
+	} else if (status === FetchStatus.failed) {
 		return <Error />;
 	} else {
-        return (
+		return (
 			<Routes>
 				<Route path='/' element={<Layout />}>
 					<Route index element={<OrdersList />} />
@@ -35,7 +35,7 @@ function App() {
 				</Route>
 			</Routes>
 		);
-    }
+	}
 }
 
 export default App;

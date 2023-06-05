@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks';
-import { selectBurger, selectById, setDone } from '../ordersList/ordersSlice';
+import { OrderStatus, selectBurger, selectById, setDone } from '../ordersList/ordersSlice';
 import { Button, Container, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { FormEvent, useState } from 'react';
@@ -40,9 +40,9 @@ export function Burger() {
 									name={group.categoryId}
 									id={option.id}
 									defaultChecked={
-										order?.orderStatus === 'done'
+										order?.orderStatus === OrderStatus.done
 									}
-									disabled={order?.orderStatus !== 'cooking'}
+									disabled={order?.orderStatus !== OrderStatus.cooking}
 								/>
 							</li>
 						))}
@@ -76,7 +76,7 @@ export function Burger() {
 				onSubmit={handleDone}
 			>
 				{groups}
-				{order?.orderStatus === 'cooking' && (
+				{order?.orderStatus === OrderStatus.cooking && (
 					<Button variant='primary' type='submit' className='mt-5'>
 						Готово
 					</Button>

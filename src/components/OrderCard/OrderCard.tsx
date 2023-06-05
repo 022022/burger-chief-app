@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { addToUserCooking, selectById, setCooking } from '../../features/ordersList/ordersSlice';
+import { OrderStatus, addToUserCooking, selectById, setCooking } from '../../features/ordersList/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { EntityId } from '@reduxjs/toolkit';
 import { Link } from 'react-router-dom';
@@ -16,20 +16,21 @@ export function OrderCard({ id }: { id: EntityId }) {
 
 	const statusInfo = () => {
 		switch (order?.orderStatus) {
-			case 'idle':
+			case OrderStatus.idle:
 				return (
 					<Button variant='primary' onClick={startCooking}>
 						Взять в работу
 					</Button>
 				);
-			case 'cooking':
+			case OrderStatus.cooking:
 				return <p>Готовит {order.chief}</p>;
-			case 'done':
+			case OrderStatus.done:
 				return <p>Готово ({order.chief})</p>;
 		}
 	};
 
-    const statusColor = order?.orderStatus === 'idle' ? 'warning' : 'secondary';
+    const statusColor =
+		order?.orderStatus === OrderStatus.idle ? 'warning' : 'secondary';
 
     const date = new Date(order?.date || Date.now());
 
