@@ -11,7 +11,6 @@ import { RootState } from '../../app/store';
 export interface OrdersState {
 	burger: BurgerGroup[];
 	burgerOrders: BurgerOrder[];
-	userCooking: string[];
 	fetchStatus: FetchStatus;
 }
 
@@ -31,7 +30,6 @@ export interface BurgerOrder {
 	date: Date;
 	id: string;
 	ingredients: string[];
-	chief: string;
 	quantity: number;
 	orderStatus: OrderStatus;
 }
@@ -50,11 +48,9 @@ const ordersAdapter = createEntityAdapter<BurgerOrder>({
 
 const initialState = ordersAdapter.getInitialState<{
 	burger: BurgerGroup[];
-	userCooking: string[];
 	fetchStatus: FetchStatus
 }>({
 	burger: [],
-	userCooking: [],
 	fetchStatus: FetchStatus.idle,
 });
 
@@ -78,14 +74,6 @@ export const orderSlice = createSlice({
 				id: action.payload,
 				changes: { orderStatus: OrderStatus.done },
 			});
-            state.userCooking = state.userCooking.filter(
-				(item) => item !== action.payload
-			);
-		},
-		addToUserCooking: (state, action) => {
-            if (!state.userCooking.find((item) => item === action.payload)) {
-                state.userCooking.push(action.payload);
-            }
 		},
 	},
 	extraReducers: (builder) => {
@@ -107,7 +95,6 @@ export const orderSlice = createSlice({
 								date: item.orderDate,
 								id: burger.id,
 								ingredients: burger.ingredients,
-								chief: '',
 								quantity: burger.quantity,
                                 orderStatus: OrderStatus.idle
 							};
@@ -127,7 +114,7 @@ export const orderSlice = createSlice({
 	},
 });
 
-export const { setCooking, addToUserCooking, setDone } = orderSlice.actions;
+export const { setCooking, setDone } = orderSlice.actions;
 
 export const { selectAll, selectById, selectIds } =
 	ordersAdapter.getSelectors<RootState>((state) => state.orders);
@@ -139,6 +126,6 @@ export const selectBurger = createSelector(
 
 export const selectFetchStatus = (state: RootState) => state.orders.fetchStatus;
 
-export const selectUserCooking = (state: RootState) => state.orders.userCooking;
+
 
 export default orderSlice.reducer;

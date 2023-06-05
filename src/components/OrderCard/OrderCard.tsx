@@ -1,17 +1,19 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { OrderStatus, addToUserCooking, selectById, setCooking } from '../../features/ordersList/ordersSlice';
+import { OrderStatus, selectById, setCooking } from '../../features/ordersList/ordersSlice';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { EntityId } from '@reduxjs/toolkit';
 import { Link } from 'react-router-dom';
+import { addToUserCooking, selectUserName } from '../../features/user/userSlice';
 
 export function OrderCard({ id }: { id: EntityId }) {
 	const dispatch = useAppDispatch();
     const order = useAppSelector((state) => selectById(state, id));
+    const chief = useAppSelector(selectUserName);
 
 	function startCooking() {
 		dispatch(setCooking(id));
-        dispatch(addToUserCooking(id));
+        dispatch(addToUserCooking(order?.id));
 	}
 
 	const statusInfo = () => {
@@ -23,9 +25,9 @@ export function OrderCard({ id }: { id: EntityId }) {
 					</Button>
 				);
 			case OrderStatus.cooking:
-				return <p>Готовит {order.chief}</p>;
+				return <p>Готовит {chief}</p>;
 			case OrderStatus.done:
-				return <p>Готово ({order.chief})</p>;
+				return <p>Готово ({chief})</p>;
 		}
 	};
 

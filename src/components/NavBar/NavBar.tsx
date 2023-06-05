@@ -8,7 +8,7 @@ export function NavBar() {
 			<Container>
 				<Navbar.Brand>
 					<Nav.Link
-						to='/'
+						to='/orders'
 						as={NavLink}
 						className='nav-link'
 						eventKey='0'

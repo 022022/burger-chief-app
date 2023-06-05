@@ -4,6 +4,7 @@ import { OrderStatus, selectBurger, selectById, setDone } from '../ordersList/or
 import { Button, Container, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { FormEvent, useState } from 'react';
+import { removeFromUserCooking } from '../user/userSlice';
 
 export function Burger() {
     const { id } = useParams();
@@ -61,7 +62,8 @@ export function Burger() {
 			setValidated(true);
 		} else {
 			dispatch(setDone(order?.id));
-			navigate('/', { replace: true });
+            dispatch(removeFromUserCooking(order?.id));
+			navigate('/orders', { replace: true });
 		}
 	}
 

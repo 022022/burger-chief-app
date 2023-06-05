@@ -10,6 +10,7 @@ import { Error } from './pages/Error';
 import { Burger } from './features/burger';
 import { Info } from './pages/Info';
 import { Cooking } from './pages/Cooking';
+import { Enter } from './pages/Enter';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -26,8 +27,9 @@ function App() {
 	} else {
 		return (
 			<Routes>
+				<Route index element={<Enter />} />
 				<Route path='/' element={<Layout />}>
-					<Route index element={<OrdersList />} />
+					<Route path='orders' element={<OrdersList />} />
 					<Route path='info' element={<Info />} />
 					<Route path='cooking' element={<Cooking />} />
 					<Route path='burger/:id' element={<Burger />} />
